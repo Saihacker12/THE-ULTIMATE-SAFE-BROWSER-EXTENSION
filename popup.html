@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SafeBrowse Advanced</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">
+                <div class="icon">🛡️</div>
+                <div class="title">
+                    <h3>SafeBrowse Advanced</h3>
+                    <p class="version">v2.0.0 • With Whitelist</p>
+                </div>
+            </div>
+            <div class="status" id="status">
+                <div class="status-dot active" id="status-dot"></div>
+                <span id="status-text">Active</span>
+            </div>
+        </div>
+
+        <!-- Password Screen -->
+        <div class="password-screen" id="password-screen">
+            <div class="password-form">
+                <h4>🔒 Password Required</h4>
+                <p>Enter password to access advanced settings:</p>
+                <input type="password" id="password" placeholder="Enter password" maxlength="20">
+                <div class="button-group">
+                    <button class="btn-primary" id="unlock-btn">Unlock Settings</button>
+                    <button class="btn-secondary" id="stats-view-btn">View Stats Only</button>
+                </div>
+                <div class="password-error" id="password-error"></div>
+            </div>
+        </div>
+
+        <!-- Stats Only View -->
+        <div class="stats-view" id="stats-only-view" style="display: none;">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">🚫</div>
+                    <div class="stat-content">
+                        <div class="stat-number" id="stats-blocked-count">0</div>
+                        <div class="stat-label">Total Blocked</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">✅</div>
+                    <div class="stat-content">
+                        <div class="stat-number" id="stats-whitelisted-count">0</div>
+                        <div class="stat-label">Whitelisted</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📅</div>
+                    <div class="stat-content">
+                        <div class="stat-number" id="stats-today-count">0</div>
+                        <div class="stat-label">Today</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="whitelist-quick-view">
+                <h4>🔓 Quick Whitelist</h4>
+                <p class="current-site" id="current-site-display">Current site: Loading...</p>
+                <button class="btn-primary" id="quick-whitelist-btn" style="display: none;">
+                    Add Current Site to Whitelist
+                </button>
+                <div class="whitelist-status" id="whitelist-status"></div>
+            </div>
+
+            <button class="btn-secondary" id="back-to-password">Access Full Settings</button>
+        </div>
+
+        <!-- Main Settings -->
+        <div class="main-settings" id="main-settings" style="display: none;">
+            <!-- Enhanced Stats Dashboard -->
+            <div class="stats-section">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">🚫</div>
+                        <div class="stat-content">
+                            <div class="stat-number" id="blocked-count">0</div>
+                            <div class="stat-label">Total Blocked</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">✅</div>
+                        <div class="stat-content">
+                            <div class="stat-number" id="whitelisted-count">0</div>
+                            <div class="stat-label">Whitelisted</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📅</div>
+                        <div class="stat-content">
+                            <div class="stat-number" id="today-count">0</div>
+                            <div class="stat-label">Today</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🧠</div>
+                        <div class="stat-content">
+                            <div class="stat-number" id="ai-blocks">0</div>
+                            <div class="stat-label">AI Detected</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Tabs -->
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="general">General</button>
+                <button class="tab-btn" data-tab="filters">Filters</button>
+                <button class="tab-btn" data-tab="whitelist">Whitelist</button>
+                <button class="tab-btn" data-tab="schedule">Schedule</button>
+                <button class="tab-btn" data-tab="logs">Logs</button>
+            </div>
+
+            <!-- General Tab -->
+            <div class="tab-content active" id="general-tab">
+                <div class="setting-group">
+                    <label class="toggle-setting">
+                        <input type="checkbox" id="extension-enabled" checked>
+                        <span class="slider"></span>
+                        Enable SafeBrowse Advanced
+                    </label>
+                </div>
+
+                <div class="setting-group">
+                    <label class="toggle-setting">
+                        <input type="checkbox" id="safesearch-enabled" checked>
+                        <span class="slider"></span>
+                        SafeSearch Enforcement
+                    </label>
+                </div>
+
+                <div class="setting-group">
+                    <label class="toggle-setting">
+                        <input type="checkbox" id="nsfw-detection-enabled" checked>
+                        <span class="slider"></span>
+                        AI NSFW Image Detection
+                    </label>
+                </div>
+
+                <div class="setting-group">
+                    <label class="toggle-setting">
+                        <input type="checkbox" id="whitelist-enabled" checked>
+                        <span class="slider"></span>
+                        Whitelist Protection (Never block whitelisted sites)
+                    </label>
+                </div>
+
+                <div class="setting-group">
+                    <div class="session-status">
+                        <div class="session-indicator" id="session-indicator">
+                            <span class="session-dot active" id="session-dot"></span>
+                            <span id="session-text">Session Active</span>
+                        </div>
+                        <p class="session-description">Current blocking session status</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filters Tab -->
+            <div class="tab-content" id="filters-tab">
+                <div class="setting-group">
+                    <label class="setting-label">Blocked Keywords:</label>
+                    <textarea id="keywords" rows="4" placeholder="Enter keywords (one per line)&#10;porn&#10;sex&#10;xxx&#10;adult"></textarea>
+                    <div class="input-info">
+                        <span id="keyword-count">0</span> keywords configured
+                    </div>
+                </div>
+
+                <div class="setting-group">
+                    <label class="setting-label">Blocked URLs/Domains:</label>
+                    <textarea id="urls" rows="4" placeholder="Enter URLs (one per line)&#10;pornhub.com&#10;xvideos.com&#10;onlyfans.com"></textarea>
+                    <div class="input-info">
+                        <span id="url-count">0</span> URLs configured
+                    </div>
+                </div>
+            </div>
+
+            <!-- NEW: Whitelist Tab -->
+            <div class="tab-content" id="whitelist-tab">
+                <div class="whitelist-header">
+                    <h4>🔓 Whitelist Management</h4>
+                    <p class="setting-description">Sites on this list will NEVER be blocked, even if they match keywords or blocked URLs.</p>
+                </div>
+
+                <div class="current-site-section">
+                    <div class="setting-group">
+                        <label class="setting-label">Current Website:</label>
+                        <div class="current-site-info">
+                            <div class="site-display" id="current-site-url">Loading current site...</div>
+                            <button class="btn-secondary" id="add-current-site-btn">
+                                ➕ Add Current Site to Whitelist
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="setting-group">
+                    <label class="setting-label">Whitelisted Domains:</label>
+                    <textarea id="whitelist-domains" rows="5" placeholder="Enter trusted domains (one per line)&#10;youtube.com&#10;wikipedia.org&#10;github.com&#10;stackoverflow.com"></textarea>
+                    <div class="input-info">
+                        <span id="whitelist-count">0</span> domains whitelisted
+                    </div>
+                </div>
+
+                <div class="whitelist-presets">
+                    <h5>📋 Preset Categories</h5>
+                    <div class="preset-grid">
+                        <button class="preset-btn" data-preset="educational">
+                            📚 Educational Sites
+                        </button>
+                        <button class="preset-btn" data-preset="work">
+                            💼 Work/Business
+                        </button>
+                        <button class="preset-btn" data-preset="news">
+                            📰 News & Media
+                        </button>
+                        <button class="preset-btn" data-preset="social">
+                            💬 Social Media
+                        </button>
+                        <button class="preset-btn" data-preset="entertainment">
+                            🎬 Entertainment
+                        </button>
+                        <button class="preset-btn" data-preset="health">
+                            🏥 Health & Medical
+                        </button>
+                    </div>
+                </div>
+
+                <div class="whitelist-actions">
+                    <div class="button-group-horizontal">
+                        <button class="btn-secondary" id="import-whitelist-btn">
+                            📥 Import Whitelist
+                        </button>
+                        <button class="btn-secondary" id="export-whitelist-btn">
+                            📤 Export Whitelist
+                        </button>
+                        <button class="btn-danger" id="clear-whitelist-btn">
+                            🗑️ Clear All
+                        </button>
+                    </div>
+                </div>
+
+                <div class="whitelist-status-display" id="whitelist-operation-status"></div>
+            </div>
+
+            <!-- Schedule Tab -->
+            <div class="tab-content" id="schedule-tab">
+                <div class="setting-group">
+                    <label class="toggle-setting">
+                        <input type="checkbox" id="focus-mode-enabled">
+                        <span class="slider"></span>
+                        Focus Mode Scheduling
+                    </label>
+                    <p class="setting-description">Block content during specific hours (whitelist still applies)</p>
+                </div>
+
+                <div class="schedule-settings" id="schedule-settings" style="display: none;">
+                    <div class="setting-group">
+                        <label class="setting-label">Blocking Hours:</label>
+                        <div class="time-range">
+                            <select id="start-hour">
+                                <option value="22" selected>10:00 PM</option>
+                                <option value="21">9:00 PM</option>
+                                <option value="20">8:00 PM</option>
+                                <option value="23">11:00 PM</option>
+                            </select>
+                            <span>to</span>
+                            <select id="end-hour">
+                                <option value="6" selected>6:00 AM</option>
+                                <option value="7">7:00 AM</option>
+                                <option value="8">8:00 AM</option>
+                                <option value="5">5:00 AM</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="setting-group">
+                        <label class="toggle-setting">
+                            <input type="checkbox" id="weekends-only">
+                            <span class="slider"></span>
+                            Weekends Only
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Logs Tab -->
+            <div class="tab-content" id="logs-tab">
+                <div class="logs-header">
+                    <h4>📋 Activity Log</h4>
+                    <div class="logs-controls">
+                        <button class="btn-secondary small" id="refresh-logs">Refresh</button>
+                        <button class="btn-danger small" id="clear-logs">Clear</button>
+                    </div>
+                </div>
+
+                <div class="log-filters">
+                    <select id="log-filter">
+                        <option value="all">All Events</option>
+                        <option value="blocked">Blocked Only</option>
+                        <option value="whitelisted">Whitelisted Only</option>
+                        <option value="ai-detection">AI Detections</option>
+                    </select>
+                </div>
+
+                <div class="logs-container">
+                    <ul class="log-list" id="logList">
+                        <li class="log-loading">Loading activity log...</li>
+                    </ul>
+                </div>
+                <div class="logs-summary" id="logs-summary">
+                    <span id="total-logs">0</span> total events logged
+                </div>
+            </div>
+
+            <!-- Save Button -->
+            <div class="save-section">
+                <button class="btn-primary" id="saveBtn">Save All Settings</button>
+                <div class="save-status" id="save-status"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html>

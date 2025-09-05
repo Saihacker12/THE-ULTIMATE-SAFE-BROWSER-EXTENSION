@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Content Blocked - SafeBrowse Advanced</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: #333;
+            margin: 0;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 700px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(20px);
+        }
+
+        .icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: shield-glow 3s ease-in-out infinite;
+        }
+
+        @keyframes shield-glow {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 10px rgba(102, 126, 234, 0.3)); }
+            50% { transform: scale(1.05); filter: drop-shadow(0 0 20px rgba(102, 126, 234, 0.6)); }
+        }
+
+        .title {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: #2d3748;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: #718096;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .premium-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 30px;
+        }
+
+        .message {
+            background: linear-gradient(135deg, #48bb78, #38a169);
+            color: white;
+            padding: 24px;
+            border-radius: 16px;
+            margin-bottom: 30px;
+            font-size: 18px;
+            font-weight: 500;
+            line-height: 1.5;
+            box-shadow: 0 8px 25px rgba(72, 187, 120, 0.3);
+        }
+
+        .ai-notice {
+            background: rgba(156, 163, 175, 0.1);
+            color: #6b7280;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            border: 1px solid rgba(156, 163, 175, 0.2);
+            display: none;
+        }
+
+        /* NEW: Enhanced Whitelist Information */
+        .whitelist-info {
+            background: rgba(72, 187, 120, 0.1);
+            color: #2f855a;
+            padding: 20px;
+            border-radius: 16px;
+            margin-bottom: 30px;
+            font-size: 15px;
+            border: 2px solid rgba(72, 187, 120, 0.2);
+            text-align: left;
+        }
+
+        .whitelist-info h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 0 0 12px 0;
+            color: #2f855a;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .whitelist-info .highlight {
+            font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+            background: rgba(72, 187, 120, 0.15);
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 14px;
+            color: #2f855a;
+        }
+
+        .whitelist-steps {
+            list-style: none;
+            padding: 0;
+            margin: 15px 0 0 0;
+        }
+
+        .whitelist-steps li {
+            margin: 8px 0;
+            padding: 8px 12px;
+            background: rgba(72, 187, 120, 0.05);
+            border-radius: 8px;
+            border-left: 4px solid #48bb78;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .whitelist-steps li strong {
+            color: #2f855a;
+            font-weight: 600;
+        }
+
+        .blocked-details {
+            background: rgba(245, 101, 101, 0.1);
+            color: #c53030;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            font-size: 14px;
+            border: 1px solid rgba(245, 101, 101, 0.2);
+            text-align: left;
+        }
+
+        .blocked-details h4 {
+            margin: 0 0 10px 0;
+            font-size: 16px;
+            color: #c53030;
+        }
+
+        .blocked-url {
+            font-family: monospace;
+            font-size: 12px;
+            word-break: break-all;
+            background: rgba(245, 101, 101, 0.1);
+            padding: 8px 10px;
+            border-radius: 6px;
+            margin-top: 8px;
+        }
+
+        .activities {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 16px;
+            margin-top: 30px;
+        }
+
+        .activity-item {
+            background: rgba(102, 126, 234, 0.08);
+            padding: 20px;
+            border-radius: 12px;
+            border: 2px solid rgba(102, 126, 234, 0.15);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .activity-item:hover {
+            transform: translateY(-3px);
+            background: rgba(102, 126, 234, 0.12);
+            border-color: rgba(102, 126, 234, 0.25);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
+        }
+
+        .activity-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .activity-text {
+            font-size: 15px;
+            font-weight: 500;
+            color: #2d3748;
+            line-height: 1.4;
+        }
+
+        .footer {
+            font-size: 16px;
+            color: #718096;
+            margin-top: 30px;
+            line-height: 1.6;
+        }
+
+        .footer strong {
+            color: #2d3748;
+        }
+
+        .version-info {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            font-size: 12px;
+            color: #a0aec0;
+        }
+
+        @media (max-width: 768px) {
+            .container { padding: 30px 20px; }
+            .title { font-size: 28px; }
+            .icon { font-size: 60px; }
+            .activities { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="icon">🛡️</div>
+        <div class="premium-badge">SafeBrowse Advanced v2.0 • With Whitelist</div>
+        <h1 class="title">Content Blocked</h1>
+        <p class="subtitle">This content has been blocked by SafeBrowse Advanced's AI-powered protection system.</p>
+
+        <div class="message">
+            🌟 Excellent! You're staying focused on your goals. Every time you resist temptation, you're building stronger willpower and investing in your future self.
+        </div>
+
+        <div class="ai-notice" id="ai-notice">
+            🤖 This content was detected and blocked by our advanced AI image recognition system
+        </div>
+
+        <div class="blocked-details" id="blocked-details" style="display: none;">
+            <h4>🚫 Blocking Details</h4>
+            <p><strong>Reason:</strong> <span id="block-reason">Content filtering</span></p>
+            <p><strong>Details:</strong> <span id="block-details">Matched filtering criteria</span></p>
+            <div class="blocked-url" id="blocked-url">Current URL will appear here</div>
+        </div>
+
+        <div class="whitelist-info">
+            <h3>🔓 Want to Allow This Site?</h3>
+            <p>If you believe this site should be allowed, you can add <span class="highlight" id="current-hostname">this domain</span> to your whitelist in SafeBrowse Advanced settings.</p>
+
+            <div class="whitelist-steps">
+                <li><strong>Step 1:</strong> Click the SafeBrowse Advanced extension icon in your browser</li>
+                <li><strong>Step 2:</strong> Enter your password to access settings</li>
+                <li><strong>Step 3:</strong> Go to the "Whitelist" tab</li>
+                <li><strong>Step 4:</strong> Add the domain to your trusted whitelist</li>
+                <li><strong>Step 5:</strong> Save settings and refresh this page</li>
+            </div>
+
+            <p style="margin-top: 15px; font-style: italic; color: #2f855a;">
+                <strong>💡 Pro Tip:</strong> Whitelisted sites are never blocked, even if they match keywords or blocked URLs.
+            </p>
+        </div>
+
+        <div class="activities">
+            <div class="activity-item">
+                <div class="activity-icon">🏃</div>
+                <div class="activity-text">Go for a run</div>
+            </div>
+            <div class="activity-item">
+                <div class="activity-icon">📚</div>
+                <div class="activity-text">Read a book</div>
+            </div>
+            <div class="activity-item">
+                <div class="activity-icon">💪</div>
+                <div class="activity-text">Work out</div>
+            </div>
+            <div class="activity-item">
+                <div class="activity-icon">🧘</div>
+                <div class="activity-text">Meditate</div>
+            </div>
+            <div class="activity-item">
+                <div class="activity-icon">🎨</div>
+                <div class="activity-text">Be creative</div>
+            </div>
+            <div class="activity-item">
+                <div class="activity-icon">📞</div>
+                <div class="activity-text">Call someone</div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p><strong>Remember:</strong> Every moment of resistance is an investment in your future self. You're building the discipline that will serve you for life!</p>
+        </div>
+
+        <div class="version-info">
+            SafeBrowse Advanced v2.0.0 with Whitelist Protection
+        </div>
+    </div>
+
+    <script>
+        // Enhanced blocked page JavaScript with whitelist integration
+        (function() {
+            // Show AI notice if this was an AI detection
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('reason') === 'nsfw-image') {
+                document.getElementById('ai-notice').style.display = 'block';
+            }
+
+            // Display current hostname for whitelist guidance
+            try {
+                const hostname = window.location.hostname || 'unknown';
+                document.getElementById('current-hostname').textContent = hostname;
+
+                // Show blocking details if available
+                const reason = urlParams.get('reason') || 'Content filtering';
+                const details = urlParams.get('details') || 'Matched filtering criteria';
+
+                if (reason !== 'Content filtering' || details !== 'Matched filtering criteria') {
+                    document.getElementById('blocked-details').style.display = 'block';
+                    document.getElementById('block-reason').textContent = reason;
+                    document.getElementById('block-details').textContent = details;
+                    document.getElementById('blocked-url').textContent = window.location.href;
+                }
+            } catch (error) {
+                console.error('Error displaying block details:', error);
+            }
+
+            // Add click animations to activity items
+            document.querySelectorAll('.activity-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    this.style.transform = 'scale(0.95)';
+                    setTimeout(() => { this.style.transform = ''; }, 150);
+
+                    // Log interaction (optional)
+                    console.log('SafeBrowse: User clicked activity suggestion:', this.querySelector('.activity-text').textContent);
+                });
+            });
+
+            // Enhanced keyboard shortcuts
+            document.addEventListener('keydown', function(e) {
+                // Alt + W: Show whitelist instructions
+                if (e.altKey && e.key.toLowerCase() === 'w') {
+                    const whitelistInfo = document.querySelector('.whitelist-info');
+                    whitelistInfo.style.background = 'rgba(72, 187, 120, 0.2)';
+                    whitelistInfo.style.borderColor = 'rgba(72, 187, 120, 0.5)';
+                    setTimeout(() => {
+                        whitelistInfo.style.background = 'rgba(72, 187, 120, 0.1)';
+                        whitelistInfo.style.borderColor = 'rgba(72, 187, 120, 0.2)';
+                    }, 1000);
+                }
+
+                // Escape: Attempt to go back
+                if (e.key === 'Escape') {
+                    if (history.length > 1) {
+                        history.back();
+                    } else {
+                        window.close();
+                    }
+                }
+            });
+
+            console.log('SafeBrowse Advanced: Enhanced blocked page loaded with whitelist guidance');
+        })();
+    </script>
+</body>
+</html>

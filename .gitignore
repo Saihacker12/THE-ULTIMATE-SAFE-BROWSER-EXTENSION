@@ -1,0 +1,13 @@
+# SafeBrowse Advanced - Ignore file
+node_modules/
+*.log
+.DS_Store
+Thumbs.db
+*.zip
+.vscode/
+.idea/
+*.crx
+*.pem
+dist/
+build/
+temp/
