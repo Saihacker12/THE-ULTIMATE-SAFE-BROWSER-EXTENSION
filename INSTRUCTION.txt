@@ -1,0 +1,15 @@
+🚀 INSTALLATION & SETUP (5 Minutes)
+Extract 
+
+Chrome → chrome://extensions/ → Enable Developer Mode
+
+Load unpacked → Select extracted folder
+
+Click extension icon → Enter password 1234
+
+Go to Security tab → IMMEDIATELY change password
+
+Configure whitelist → Add your work sites
+
+Start building discipline! 🏃‍♂️💪
+
